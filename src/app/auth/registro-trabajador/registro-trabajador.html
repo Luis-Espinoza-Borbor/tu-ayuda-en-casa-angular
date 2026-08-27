@@ -1,0 +1,95 @@
+<main class="container contenido-principal my-5 pt-5 flex-grow-1">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="text-center mb-4 mt-3">
+                <h2 class="fw-bold text-primary">Trabaja con nosotros</h2>
+                <p class="text-muted">Únete a nuestra red de profesionales en Guayaquil y empieza a generar ingresos.
+                </p>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
+                <form (ngSubmit)="onSubmit()">
+
+                    <h5 class="fw-bold mb-4 border-bottom border-2 pb-2">Datos Personales y de Acceso</h5>
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            [(ngModel)]="trabajador.nombre" placeholder="Ej. Juan Pérez" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="correoTrabajador" class="form-label fw-bold">Correo Electrónico</label>
+                            <input type="email" class="form-control" name="correo" [(ngModel)]="trabajador.correo"
+                                required placeholder="correo@ejemplo.com">
+                            <small class="text-muted">Este será tu usuario para iniciar sesión.</small>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <label for="passTrabajador" class="form-label fw-bold">Contraseña</label>
+                            <input type="password" class="form-control" name="password"
+                                [(ngModel)]="trabajador.password" required minlength="6" placeholder="******">
+                            <small class="text-muted">Mínimo 6 caracteres.</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="cedulaTrabajador" class="form-label fw-bold">Número de Cédula</label>
+                            <input type="text" class="form-control" name="cedula" [(ngModel)]="trabajador.cedula"
+                                required placeholder="0999999999" maxlength="10">
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
+                            <!-- Validamos la edad al cambiar la fecha -->
+                            <input type="date" class="form-control" name="fechaNacimiento"
+                                [(ngModel)]="trabajador.fechaNacimiento" (change)="verificarEdad()" required>
+
+                            @if (!edadValida) {
+                            <div class="text-danger small mt-1">Debes ser mayor de 18 años para registrarte.</div>
+                            }
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mt-5 mb-4 border-bottom border-2 pb-2">Perfil Profesional</h5>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="categoriaEspecialidad" class="form-label fw-bold">Especialidad Principal</label>
+                            <select class="form-select select-dinamico" name="especialidad"
+                                [(ngModel)]="trabajador.especialidad" required>
+                                <option value="">Elige una categoría...</option>
+                                @for (cat of categorias; track cat) {
+                                <option [value]="cat">{{ cat }}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <label for="tarifaHora" class="form-label fw-bold">Tarifa por Hora ($)</label>
+                            <input type="number" class="form-control" name="tarifa" [(ngModel)]="trabajador.tarifa"
+                                required min="1" step="0.50" placeholder="Ej. 15.00">
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="experiencia" class="form-label fw-bold">Resumen de Experiencia</label>
+                        <textarea class="form-control" name="experiencia" [(ngModel)]="trabajador.experiencia" rows="3"
+                            required
+                            placeholder="Describe brevemente tus años de experiencia, habilidades y trabajos anteriores..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm"
+                        [disabled]="cargando || !edadValida">
+                        @if (cargando) {
+                        <span class="spinner-border spinner-border-sm"></span> Enviando Solicitud...
+                        } @else {
+                        Enviar Solicitud
+                        }
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>

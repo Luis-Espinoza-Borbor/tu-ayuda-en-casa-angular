@@ -1,0 +1,35 @@
+<main class="container contenido-principal my-5 pt-5 flex-grow-1">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow border-0 bg-white p-4 p-md-5 rounded-4">
+                <div class="text-center mb-4">
+                    <div class="display-4 mb-3">📬</div>
+                    <h2 class="fw-bold text-primary">Contáctanos</h2>
+                    <p class="text-muted">¿Tienes dudas, problemas con un servicio o sugerencias? Escríbenos y nuestro equipo te responderá pronto.</p>
+                </div>
+
+                <form (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="sugNombre" class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" class="form-control" name="nombre" [(ngModel)]="mensaje.nombre" placeholder="Ingresa tu nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sugCorreo" class="form-label fw-bold">Correo Electrónico</label>
+                        <input type="email" class="form-control" name="correo" [(ngModel)]="mensaje.correo" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="sugMensaje" class="form-label fw-bold">Tu Mensaje</label>
+                        <textarea class="form-control" name="texto" [(ngModel)]="mensaje.texto" rows="5" placeholder="Escribe aquí tu consulta detallada..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm py-2" [disabled]="cargando">
+                        @if (cargando) {
+                            <span class="spinner-border spinner-border-sm"></span> Enviando...
+                        } @else {
+                            Enviar Mensaje
+                        }
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

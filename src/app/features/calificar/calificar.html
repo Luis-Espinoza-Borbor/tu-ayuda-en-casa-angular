@@ -1,0 +1,50 @@
+<main class="container contenido-principal d-flex align-items-center justify-content-center my-5" style="min-height: 70vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white text-center p-4">
+                    <h3 class="fw-bold mb-0">Calificar Servicio</h3>
+                    <p class="mb-0 small text-white-50">Tu opinión nos ayuda a mejorar</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5 text-center">
+                    <!-- Mostramos los datos dinámicos -->
+                    <h5 class="fw-bold text-dark mb-1">{{ profesionalNombre }}</h5>
+                    <p class="text-muted small mb-4">Servicio del: {{ fechaServicio | date:'longDate' }}</p>
+
+                    <!-- Formulario conectado a Angular -->
+                    <form (ngSubmit)="enviarResena()">
+
+                        <!-- Estrellas interactivas -->
+                        <div class="mb-4 d-flex justify-content-center gap-2 fs-1" style="cursor: pointer;">
+                            @for (estrella of estrellas; track estrella) {
+                                <span 
+                                    (click)="seleccionarEstrella(estrella)"
+                                    [class.text-warning]="estrella <= calificacionSeleccionada"
+                                    [class.text-muted]="estrella > calificacionSeleccionada"
+                                    style="transition: color 0.2s; user-select: none;">
+                                    ★
+                                </span>
+                            }
+                        </div>
+
+                        <!-- Área de comentario -->
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control" id="comentarioResena" placeholder="Deja tu comentario"
+                                style="height: 100px" name="comentario" [(ngModel)]="comentario" required></textarea>
+                            <label for="comentarioResena">¿Cómo fue tu experiencia?</label>
+                        </div>
+
+                        <!-- Botones con enrutamiento Angular -->
+                        <div class="d-flex gap-2">
+                            <a routerLink="/historial-servicios" class="btn btn-light w-50 fw-bold shadow-sm">Cancelar</a>
+                            <button type="submit" class="btn btn-warning w-50 fw-bold shadow-sm">Enviar Reseña</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

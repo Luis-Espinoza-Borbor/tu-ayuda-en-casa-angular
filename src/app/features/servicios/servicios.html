@@ -1,0 +1,51 @@
+<main class="container contenido-principal mt-5 pt-4">
+    <!-- Buscador Superior -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8 mb-3 mb-md-0">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="Ej. plomero, limpieza, gotera, Juan..." [(ngModel)]="textoBusqueda">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select form-select-lg shadow-sm" [(ngModel)]="categoriaSeleccionada">
+                <option value="">Todas las categorías</option>
+                @for (cat of categorias; track cat) {
+                    <option [value]="cat">{{ cat }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- Contenedor de Tarjetas de Servicios -->
+    <div class="row g-4 mb-5">
+        @if (cargando) {
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+                <p class="mt-3 text-muted fw-bold fs-5">Buscando a los mejores profesionales...</p>
+            </div>
+        } @else {
+            <!-- Aquí usamos @empty que reemplaza automáticamente al "No encontrado" si no hay resultados -->
+            @for (trabajador of trabajadoresFiltrados; track trabajador.id) {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm tarjeta-hover">
+                        <div class="card-body text-center p-4">
+                            <img [src]="trabajador.foto || 'https://cdn-icons-png.flaticon.com/512/6073/6073873.png'" class="rounded-circle mb-3 object-fit-cover shadow-sm bg-light" width="100" height="100" alt="Foto">
+                            <h5 class="fw-bold mb-1">{{ trabajador.nombre }}</h5>
+                            <span class="badge bg-primary mb-3">{{ trabajador.categoria }}</span>
+                            <p class="text-muted small mb-3 text-truncate">{{ trabajador.experiencia || 'Profesional verificado.' }}</p>
+                            <h4 class="fw-bold text-dark mb-4">{{ trabajador.tarifa | currency:'USD' }}<span class="fs-6 text-muted fw-normal">/hora</span></h4>
+                            <button class="btn btn-outline-primary w-100 rounded-pill fw-bold" (click)="irAAgendar(trabajador.id)">Contactar</button>
+                        </div>
+                    </div>
+                </div>
+            } @empty {
+                <div class="col-12 text-center py-5">
+                    <span class="display-1 text-muted">🔍</span>
+                    <h4 class="fw-bold text-dark mt-3">No encontramos ese servicio o profesional</h4>
+                    <p class="text-muted">Intenta buscar con otras palabras o revisa las categorías.</p>
+                </div>
+            }
+        }
+    </div>
+</main>

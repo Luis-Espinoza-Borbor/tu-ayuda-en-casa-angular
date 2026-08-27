@@ -1,0 +1,103 @@
+<main class="container contenido-principal mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Finalizar Pago</h2>
+        <p class="text-muted">Ingresa los datos de tu tarjeta para confirmar la reserva.</p>
+    </div>
+
+    <div class="row g-5 mb-5">
+        <!-- Formulario de Tarjeta -->
+        <div class="col-md-7 col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="mb-4 fw-bold">Método de Pago</h4>
+
+                    <form (ngSubmit)="onSubmit()">
+                        <div class="mb-3">
+                            <label for="nombreTitular" class="form-label fw-bold">Nombre en la tarjeta</label>
+                            <input type="text" class="form-control text-uppercase" name="nombre" [(ngModel)]="tarjeta.nombre" (keypress)="validarSoloLetras($event)" required placeholder="EJ. JUAN PEREZ">
+                            <small class="text-muted">Tal como aparece en la tarjeta física.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="numTarjeta" class="form-label fw-bold">Número de Tarjeta</label>
+                            <input type="text" class="form-control" name="numero" [(ngModel)]="tarjeta.numero" (keypress)="validarSoloNumeros($event)" required placeholder="0000 0000 0000 0000" minlength="16" maxlength="16">
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <label for="fechaExpiracion" class="form-label fw-bold">Vencimiento (MM/AA)</label>
+                                <input type="text" class="form-control" name="expiracion" [(ngModel)]="tarjeta.expiracion" (input)="formatearExpiracion($event)" required placeholder="12/28" maxlength="5">
+                            </div>
+                            <div class="col-6">
+                                <label for="cvv" class="form-label fw-bold">CVV</label>
+                                <input type="password" class="form-control" name="cvv" [(ngModel)]="tarjeta.cvv" (keypress)="validarSoloNumeros($event)" required placeholder="123" minlength="3" maxlength="4">
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        
+                        <button class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" type="submit" [disabled]="cargando">
+                            @if (cargando) {
+                                <span class="spinner-border spinner-border-sm me-2"></span> Procesando pago...
+                            } @else {
+                                Pagar {{ reserva?.totalPagar | currency:'USD' }} y Confirmar
+                            }
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen de la Reserva -->
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow-sm border-0 bg-light sticky-top" style="top: 100px;">
+                <div class="card-body p-4">
+                    <h4 class="mb-4 fw-bold text-primary">Resumen de Reserva</h4>
+
+                    @if (reserva) {
+                        <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                            <div class="avatar-inicial bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm" style="width: 45px; height: 45px; font-size: 1.2rem;">
+                                {{ reserva.profesional.nombre.charAt(0).toUpperCase() }}
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ reserva.profesional.nombre }}</h6>
+                                <span class="badge bg-secondary">{{ reserva.profesional.especialidad }}</span>
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="bi bi-calendar-event me-2"></i> Fecha:</span>
+                                <strong>{{ reserva.fecha | date:'longDate' }}</strong>
+                            </li>
+                            <li class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="bi bi-clock me-2"></i> Hora:</span>
+                                <strong>{{ reserva.hora }}</strong>
+                            </li>
+                            <li class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="bi bi-hourglass-split me-2"></i> Duración:</span>
+                                <strong>{{ reserva.horas }} hora(s)</strong>
+                            </li>
+                            <li class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="bi bi-cash me-2"></i> Tarifa:</span>
+                                <strong>{{ reserva.profesional.tarifa | currency:'USD' }}/h</strong>
+                            </li>
+                        </ul>
+
+                        <div class="alert alert-primary mb-0 border-0 shadow-sm text-center">
+                            <span class="d-block small mb-1">Total a cobrar hoy</span>
+                            <span class="fs-2 fw-bold text-success">{{ reserva.totalPagar | currency:'USD' }}</span>
+                        </div>
+                    } @else {
+                        <p class="text-muted fst-italic">Cargando detalles de tu reserva...</p>
+                    }
+
+                    <hr class="mt-4">
+                    <p class="small text-muted text-center mt-3 mb-0">
+                        🔒 Tus pagos están procesados de forma segura mediante encriptación de 256 bits.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

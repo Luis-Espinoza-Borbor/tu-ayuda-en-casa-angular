@@ -1,0 +1,93 @@
+<main class="container contenido-principal d-flex align-items-center justify-content-center my-5 pt-4">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden w-100" style="max-width: 900px;">
+        <div class="row g-0">
+
+            <div class="col-md-5 d-none d-md-block p-0">
+                <img src="assets/registro.jpg" alt="Crear Cuenta"
+                    class="img-fluid w-100 h-100 object-fit-cover rounded-start-4">
+            </div>
+
+            <div class="col-md-7 p-4 p-md-5 bg-white" style="max-height: 85vh; overflow-y: auto;">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-primary">Crear Cuenta</h3>
+                    <p class="text-muted small">Ingresa tus datos para agendar profesionales.</p>
+                </div>
+
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="regNombre" name="nombre" placeholder="Tu Nombre" 
+                               [(ngModel)]="cliente.nombre" 
+                               (keypress)="validarSoloLetras($event)" 
+                               required>
+                        <label for="regNombre">Nombre Completo</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="regCedula" name="cedula" placeholder="Cédula/RUC" 
+                               [(ngModel)]="cliente.cedula" 
+                               (keypress)="validarSoloNumeros($event)" 
+                               required minlength="10" maxlength="10">
+                        <label for="regCedula">Cédula o RUC</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="regCorreo" name="correo" placeholder="correo@ejemplo.com" [(ngModel)]="cliente.correo" required>
+                        <label for="regCorreo">Correo Electrónico</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="regPassword" name="password" placeholder="Contraseña" [(ngModel)]="cliente.password" required minlength="6">
+                        <label for="regPassword">Contraseña</label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input type="password" class="form-control" id="regPasswordConfirm" name="passwordConfirm" placeholder="Confirmar" [(ngModel)]="cliente.passwordConfirm" required minlength="6">
+                        <label for="regPasswordConfirm">Confirmar Contraseña</label>
+                        <!-- Mensaje de error dinámico -->
+                        @if (cliente.password !== cliente.passwordConfirm && cliente.passwordConfirm.length > 0) {
+                            <div class="text-danger small mt-1 px-2">Las contraseñas no coinciden.</div>
+                        }
+                    </div>
+
+                    <div class="card bg-light border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-geo-alt-fill"></i> Tu Ubicación de Servicio</h5>
+                            <p class="text-muted small">Ayuda a los profesionales a saber exactamente dónde se requiere el servicio.</p>
+                            
+                            <div class="d-grid mb-3">
+                                <button type="button" class="btn btn-outline-primary fw-bold rounded-pill" (click)="obtenerUbicacionGPS()">
+                                    <i class="bi bi-compass"></i> Obtener mi ubicación actual (GPS)
+                                </button>
+                            </div>
+
+                            <div id="mapaRegistro" class="mb-3"></div>
+
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Latitud</label>
+                                    <input type="text" class="form-control form-control-sm bg-white" name="latitud" [value]="cliente.latitud" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Longitud</label>
+                                    <input type="text" class="form-control form-control-sm bg-white" name="longitud" [value]="cliente.longitud" readonly>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <label for="direccionReferencia" class="form-label small fw-bold">Dirección Escrita / Referencia</label>
+                                    <input type="text" id="direccionReferencia" name="direccion" class="form-control" placeholder="Ej. Alborada 11va etapa..." [(ngModel)]="cliente.direccion" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mb-3 shadow-sm" [disabled]="cargando || (cliente.password !== cliente.passwordConfirm)">
+                        @if (cargando) {
+                            <span class="spinner-border spinner-border-sm"></span> Guardando...
+                        } @else {
+                            Registrarme
+                        }
+                    </button>
+
+                    <div class="text-center small">
+                        ¿Ya tienes una cuenta? <a routerLink="/login" class="text-decoration-none fw-bold">Inicia Sesión aquí</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

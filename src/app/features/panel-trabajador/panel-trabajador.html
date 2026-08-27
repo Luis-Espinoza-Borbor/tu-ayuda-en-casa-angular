@@ -1,0 +1,259 @@
+<main class="container contenido-principal mt-5 pt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Mi Panel de Trabajo</h2>
+            <span class="text-muted small">Bienvenido, {{ nombreTrabajador }}</span>
+        </div>
+        <span class="badge bg-success fs-6">Perfil Activo</span>
+    </div>
+
+    <!-- Panel de Billetera -->
+    <div class="row mb-4" id="panelBilletera">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card bg-success text-white h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-wallet2"></i> Saldo Disponible</h6>
+                    <h2 class="fw-bold mb-0">{{ saldoDisponible | currency:'USD' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card bg-secondary text-white h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-cash-stack"></i> Total Retirado</h6>
+                    <h2 class="fw-bold mb-0">{{ totalRetirado | currency:'USD' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex flex-column justify-content-center gap-2">
+            <button class="btn btn-outline-primary fw-bold" (click)="registrarCuentaBancaria()">🏦 Mi Cuenta
+                Bancaria</button>
+            <button class="btn btn-warning fw-bold shadow-sm" (click)="retirarGanancias()">💸 Solicitar Retiro</button>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Tabla de Próximos Servicios -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-primary text-white fw-bold">
+                    Mis Próximos Servicios
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha agendada</th>
+                                    <th>Cliente</th>
+                                    <th>Horas</th>
+                                    <th>Total Ganado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (cargandoReservas) {
+                                <tr>
+                                    <td colspan="5" class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status"></div>
+                                        <div class="mt-2 text-muted small">Cargando tus servicios desde la nube...</div>
+                                    </td>
+                                </tr>
+                                } @else {
+                                    @for (trabajo of misTrabajos; track trabajo.id) {
+                                    <tr>
+                                        <!-- 1. Fecha y Hora en formato original -->
+                                        <td>
+                                            <span class="d-block fw-bold">{{ trabajo.fecha | date:'yyyy-MM-dd' }}</span>
+                                            <span class="small text-muted">{{ trabajo.hora }}</span>
+                                        </td>
+
+                                        <!-- 2. Cliente y Dirección -->
+                                        <td>
+                                            <div class="fw-bold">{{ trabajo.clienteNombre }}</div>
+                                            <div class="small text-muted">
+                                                <i class="bi bi-geo-alt-fill text-danger"></i>
+                                                {{ trabajo.direccion || 'Dirección no especificada' }}
+                                            </div>
+                                        </td>
+
+                                        <!-- 3. Horas -->
+                                        <td>{{ trabajo.horasContratadas }} hrs</td>
+
+                                        <!-- 4. Desglose de Ganancias -->
+                                        <td>
+                                            <div class="fw-bold text-success">{{ (trabajo.totalPagar * 0.85) | currency:'USD' }}</div>
+                                            <div class="small text-muted">Total cliente: {{ trabajo.totalPagar | currency:'USD' }}</div>
+                                        </td>
+
+                                        <!-- 5. Botones Apilados con subida de fotos -->
+                                        <td class="text-center">
+                                            <div class="d-flex flex-column gap-2 align-items-center">
+                                                <button class="btn btn-sm btn-info text-white fw-semibold"
+                                                    style="width: 80px;" (click)="abrirChatModal(trabajo.id)"
+                                                    title="Abrir Chat">
+                                                    <i class="bi bi-chat-dots-fill"></i> Chat
+                                                </button>
+                                                
+                                                <!-- Input invisible para evidencias -->
+                                                <input type="file" #fileInputEvidencia style="display: none;" accept="image/*" (change)="subirFotoEvidencia($event, trabajo)">
+                                                
+                                                <button class="btn btn-sm bg-white border text-dark fw-semibold"
+                                                    style="width: 80px;" title="Subir Evidencia" (click)="fileInputEvidencia.click()">
+                                                    <i class="bi bi-camera-fill"></i> Foto
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    } @empty {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">No tienes servicios agendados por ahora.</td>
+                                    </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidencias -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                    <span>Control de Evidencias</span>
+                </div>
+                <div class="card-body text-center d-flex flex-column justify-content-center p-4">
+                    <p class="text-muted small mb-3">Galería de tus últimos trabajos terminados.</p>
+
+                    <!-- Carrusel Dinámico -->
+                    @if (cargandoEvidencias) {
+                        <div class="spinner-border text-primary my-4 mx-auto" role="status"></div>
+                    } @else if (misEvidencias.length === 0) {
+                        <div class="p-4 bg-light rounded-3 text-muted small border">Aún no has subido evidencias de tus trabajos. Sube una usando el botón "Foto" en la tabla.</div>
+                    } @else {
+                        <div id="carruselEvidencias" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner rounded-3 shadow-sm border bg-dark">
+                                @for (evidencia of misEvidencias; track evidencia.id; let i = $index) {
+                                    <div class="carousel-item" [class.active]="i === 0">
+                                        <div class="d-flex align-items-center justify-content-center" style="height: 250px; position: relative;">
+                                            <!-- La foto que se subió -->
+                                            <img [src]="evidencia.url || evidencia.foto || evidencia.imagen" class="img-fluid w-100 h-100" style="object-fit: cover; opacity: 0.85;">
+                                            
+                                            <!-- Etiqueta sobre la foto -->
+                                            <div class="position-absolute bottom-0 w-100 bg-dark bg-opacity-75 text-white p-2 text-center" style="backdrop-filter: blur(2px);">
+                                                <p class="mb-0 fw-bold">{{ evidencia.servicioNombre || evidencia.cliente || 'Servicio anterior' }}</p>
+                                                <small class="text-white-50">{{ evidencia.fechaVisual | date:'mediumDate' }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Controles del carrusel -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carruselEvidencias" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carruselEvidencias" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+
+                <!-- MODAL CHAT FIREBASE -->
+                <div class="modal fade" id="modalChatFirebase" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title fw-bold">
+                                    <i class="bi bi-chat-dots-fill me-2"></i> Chat con Cliente
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body caja-chat-fondo bg-light" id="cajaMensajes"
+                                style="height: 450px; overflow-y: auto;">
+                                @if (mensajesChat.length === 0) {
+                                <div class="text-center text-muted mt-4">No hay mensajes. ¡Escribe el primero!</div>
+                                }
+
+                                @for (msg of mensajesChat; track msg.timestamp) {
+                                <div class="d-flex flex-column mb-3"
+                                    [ngClass]="msg.emisorRol === usuarioActual.rol ? 'align-items-end' : 'align-items-start'">
+                                    <div class="p-2 rounded-3 shadow-sm" style="max-width: 85%;"
+                                        [ngClass]="msg.emisorRol === usuarioActual.rol ? 'text-white bg-primary' : 'text-dark bg-white border'">
+
+                                        @if (msg.tipoMensaje === 'audio') {
+                                        <audio controls style="height: 40px; max-width: 210px;" class="mt-1">
+                                            <source [src]="msg.texto" type="audio/webm">
+                                        </audio>
+                                        } @else if (msg.tipoMensaje === 'imagen') {
+                                        <!-- Renderizado de Imágenes en el Chat -->
+                                        <img [src]="msg.texto" class="img-fluid rounded mt-1 shadow-sm bg-white"
+                                            style="max-height: 200px; cursor: pointer;">
+                                        } @else {
+                                        {{ msg.texto }}
+                                        }
+
+                                    </div>
+                                    <small class="text-muted mt-1" style="font-size: 0.70rem;">
+                                        {{ msg.emisorRol === usuarioActual.rol ? 'Tú' : (msg.emisorNombre | slice:0:10)
+                                        }} • {{ msg.fechaFormateada | date:'shortTime' }}
+                                    </small>
+                                </div>
+                                }
+                            </div>
+
+                            <div class="modal-footer flex-column align-items-stretch p-2 bg-white border-top">
+                                @if (grabandoAudio) {
+                                <div
+                                    class="text-danger small fw-bold mb-1 text-center animate__animated animate__pulse animate__infinite">
+                                    🔴 Grabando nota de voz... suelta para enviar
+                                </div>
+                                }
+
+                                <div class="d-flex w-100 gap-2">
+                                    <!-- Input invisible para adjuntar imagen en el chat -->
+                                    <input type="file" #fileInputChat style="display: none;" accept="image/*" (change)="subirImagenChat($event)">
+                                    
+                                    <button type="button" class="btn btn-light rounded-circle shadow-sm text-secondary border" 
+                                        style="width: 45px; height: 45px; flex-shrink: 0;" 
+                                        (click)="fileInputChat.click()" title="Adjuntar imagen">
+                                        <i class="bi bi-paperclip"></i>
+                                    </button>
+
+                                    <input type="text" class="form-control rounded-pill"
+                                        placeholder="Escribe un mensaje..." [(ngModel)]="nuevoMensajeTexto"
+                                        (keyup.enter)="enviarMensajeTexto()">
+
+                                    <button type="button" class="btn rounded-circle shadow-sm"
+                                        [ngClass]="grabandoAudio ? 'btn-warning' : 'btn-danger'"
+                                        title="Mantén presionado para hablar"
+                                        style="width: 45px; height: 45px; flex-shrink: 0;"
+                                        (mousedown)="iniciarGrabacion($event)"
+                                        (mouseup)="detenerGrabacionYSubir($event)"
+                                        (mouseleave)="detenerGrabacionYSubir($event)"
+                                        (touchstart)="iniciarGrabacion($event)"
+                                        (touchend)="detenerGrabacionYSubir($event)">
+                                        <i class="bi bi-mic-fill"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary rounded-circle shadow-sm"
+                                        style="width: 45px; height: 45px; flex-shrink: 0;"
+                                        (click)="enviarMensajeTexto()">
+                                        <i class="bi bi-send-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

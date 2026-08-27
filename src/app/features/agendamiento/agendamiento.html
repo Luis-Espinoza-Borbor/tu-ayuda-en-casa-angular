@@ -1,0 +1,80 @@
+<main class="container contenido-principal mt-5 pt-4">
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Agendar Servicio</h2>
+                <p class="text-muted">Selecciona los detalles para tu reserva.</p>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-body p-4 p-md-5">
+                    <form (ngSubmit)="onSubmit()">
+
+                        <div class="mb-4">
+                            <label for="selectProfesional" class="form-label fw-bold">Profesional a contratar</label>
+                            <select class="form-select form-select-lg" name="profesional" [(ngModel)]="profesionalSeleccionadoId" required>
+                                <option value="" selected disabled>Elige un profesional...</option>
+                                @for (profesional of profesionales; track profesional.id) {
+                                    <option [value]="profesional.id">
+                                        {{ profesional.nombre }} - {{ profesional.categoria }} ({{ profesional.tarifa | currency:'USD' }}/h)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="fechaServicio" class="form-label fw-bold">Fecha</label>
+                                <input type="date" class="form-control" name="fecha" [(ngModel)]="reserva.fecha" required>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="horaServicio" class="form-label fw-bold">Hora de llegada</label>
+                                <input type="time" class="form-control" name="hora" [(ngModel)]="reserva.hora" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="inputHoras" class="form-label fw-bold">¿Cuántas horas de servicio necesitas?</label>
+                            <input type="number" class="form-control form-control-lg" name="horas" [(ngModel)]="reserva.horas" min="1" max="12" required>
+                        </div>
+
+                        <div class="card bg-light border-0 shadow-sm mb-4">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-geo-fill text-primary"></i> Dirección del Servicio</h5>
+                                <p class="text-muted small">Por defecto usamos tu ubicación, pero puedes mover el pin en el mapa si lo requieres para este trabajo específico.</p>
+                                
+                                <div class="d-grid mb-3">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill fw-bold" (click)="obtenerUbicacionGPS()">
+                                        <i class="bi bi-compass"></i> Usar mi ubicación GPS actual
+                                    </button>
+                                </div>
+
+                                <div id="mapaAgendamiento" class="mb-3"></div>
+
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label small fw-bold">Dirección de Entrega / Referencia</label>
+                                        <input type="text" name="direccion" [(ngModel)]="reserva.direccion" class="form-control" placeholder="Ej. Urbanización Los Ríos, Mz 10..." required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Panel de precio dinámico -->
+                        <div class="alert alert-primary d-flex justify-content-between align-items-center mb-4">
+                            <span class="fs-5 fw-bold">Total a pagar:</span>
+                            <span class="fs-3 fw-bold text-success">{{ totalPagar | currency:'USD' }}</span>
+                        </div>
+
+                        <!-- El botón se deshabilita si faltan datos importantes -->
+                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm" [disabled]="!profesionalSeleccionadoId || !reserva.fecha || !reserva.hora || !reserva.direccion || reserva.horas < 1">
+                            Continuar al Pago
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

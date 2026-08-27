@@ -1,0 +1,163 @@
+<main class="container contenido-principal mt-5 pt-5">
+    <h2 class="fw-bold mb-4">Panel de Control General</h2>
+
+    <!-- Tarjetas de Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold text-white-50">Ventas Totales</h6>
+                    <h2 class="display-5 fw-bold mb-0">{{ ventasTotales | currency:'USD' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold text-white-50">Servicios Completados</h6>
+                    <h2 class="display-5 fw-bold mb-0">{{ serviciosCompletados }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-warning text-dark border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h6 class="text-uppercase fw-bold text-dark-50">Trabajadores Aprobados</h6>
+                    <h2 class="display-5 fw-bold mb-0">{{ trabajadoresAprobados }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Gestión de Profesiones -->
+        <div class="col-12 col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-dark text-white fw-bold py-3">
+                    🛠️ Gestionar Profesiones
+                </div>
+                <div class="card-body">
+                    <!-- Formulario conectado con ngModel -->
+                    <form (ngSubmit)="agregarProfesion()" class="d-flex gap-2 mb-3">
+                        <input type="text" name="profesion" class="form-control" placeholder="Ej. Carpintería" 
+                               [(ngModel)]="nuevaProfesion" required autocomplete="off">
+                        <button type="submit" class="btn btn-primary fw-bold">Agregar</button>
+                    </form>
+                    
+                    <ul class="list-group list-group-flush">
+                        <!-- Iteramos la lista de profesiones -->
+                        @for (prof of profesiones; track prof; let i = $index) {
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                {{ prof }}
+                                <button class="btn btn-sm btn-outline-danger" (click)="eliminarProfesion(i)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </li>
+                        } @empty {
+                            <li class="list-group-item text-center text-muted">No hay profesiones registradas.</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solicitudes de Trabajadores -->
+        <div class="col-12 col-lg-7 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-primary text-white fw-bold py-3">
+                    Solicitudes de Trabajadores
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Especialidad</th>
+                                    <th>Tarifa</th>
+                                    <th>Estado</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (trabajador of trabajadores; track trabajador.id) {
+                                    <tr>
+                                        <td class="fw-bold">{{ trabajador.nombre }}</td>
+                                        <td>{{ trabajador.cedula }}</td>
+                                        <!-- Corregimos 'especialidad' por 'categoria' que es como está en Firebase -->
+                                        <td><span class="badge bg-secondary">{{ trabajador.categoria || trabajador.especialidad || 'General' }}</span></td>
+                                        <!-- Protegemos la tarifa por si el usuario aún no la tiene en BD -->
+                                        <td>{{ (trabajador.tarifa || 15) | currency:'USD' }}/hr</td>
+                                        <td>
+                                            <span class="badge" [class.bg-warning]="trabajador.estado === 'Pendiente'" [class.bg-success]="trabajador.estado === 'Aprobado'" [class.bg-danger]="trabajador.estado === 'Rechazado'">
+                                                {{ trabajador.estado || 'Pendiente' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <!-- Si no está aprobado, mostramos botón de Aprobar -->
+                                            @if (trabajador.estado !== 'Aprobado') {
+                                                <button class="btn btn-sm btn-success me-1" (click)="cambiarEstado(trabajador, 'Aprobado')" title="Aprobar"><i class="bi bi-check-lg"></i></button>
+                                            }
+                                            <!-- Si no está rechazado, mostramos botón de Rechazar -->
+                                            @if (trabajador.estado !== 'Rechazado') {
+                                                <button class="btn btn-sm btn-danger" (click)="cambiarEstado(trabajador, 'Rechazado')" title="Rechazar"><i class="bi bi-x-lg"></i></button>
+                                            }
+                                        </td>
+                                    </tr>
+                                } @empty {
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">No hay trabajadores registrados.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buzón de Mensajes -->
+    <div class="row mt-4 mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white fw-bold py-3">
+                    📬 Buzón de Mensajes y Sugerencias
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Remitente</th>
+                                    <th>Correo</th>
+                                    <th>Mensaje</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (msg of mensajes; track msg.id) {
+                                    <tr>
+                                        <td>{{ msg.fecha | date:'shortDate' }}</td>
+                                        <td class="fw-bold">{{ msg.remitente || msg.nombre }}</td>
+                                        <td><a href="mailto:{{msg.correo}}" class="text-decoration-none">{{ msg.correo }}</a></td>
+                                        <td>{{ msg.texto || msg.mensaje }}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarMensaje(msg.id)"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                } @empty {
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">El buzón está vacío. ¡No hay mensajes nuevos!</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

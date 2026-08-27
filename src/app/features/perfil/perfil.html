@@ -1,0 +1,65 @@
+<main class="container contenido-principal my-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow border-0 rounded-4 p-4 p-md-5 bg-white">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-primary">Configuración de Perfil</h3>
+                    <p class="text-muted small">Actualiza tu foto y datos personales de acceso.</p>
+                </div>
+
+                <div class="d-flex flex-column align-items-center mb-4">
+                    <!-- Vista previa de la foto o inicial del nombre -->
+                    <div id="vistaPreviaContenedor" class="mb-3">
+                        @if (fotoPrevia) {
+                            <img [src]="fotoPrevia" alt="Mi Foto" class="rounded-circle object-fit-cover shadow-sm border border-3 border-primary" style="width: 120px; height: 120px;">
+                        } @else if (usuario.nombre) {
+                            <div class="avatar-inicial bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm mx-auto" style="width: 120px; height: 120px; font-size: 3rem;">
+                                {{ usuario.nombre.charAt(0).toUpperCase() }}
+                            </div>
+                        }
+                    </div>
+                    
+                    <label for="inputFotoPerfil" class="btn btn-outline-primary btn-sm fw-bold">
+                        <i class="bi bi-camera-fill me-1"></i> Subir nueva foto
+                    </label>
+                    <!-- Evento change para detectar cuando seleccionan un archivo -->
+                    <input type="file" id="inputFotoPerfil" accept="image/png, image/jpeg" class="d-none" (change)="onArchivoSeleccionado($event)">
+                    <small class="text-muted mt-2">Formatos aceptados: JPG, PNG.</small>
+                </div>
+
+                <form (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" class="form-control" name="nombre" [(ngModel)]="usuario.nombre" (keypress)="validarSoloLetras($event)" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="editCedula" class="form-label fw-bold">Número de Cédula</label>
+                        <input type="text" class="form-control" name="cedula" [(ngModel)]="usuario.cedula" (keypress)="validarSoloNumeros($event)" required minlength="10" maxlength="10" autocomplete="off">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editCorreo" class="form-label fw-bold">Correo Electrónico</label>
+                        <input type="email" class="form-control" name="correo" [(ngModel)]="usuario.correo" required autocomplete="email">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="editPassword" class="form-label fw-bold">Nueva Contraseña</label>
+                        <input type="password" class="form-control" name="password" [(ngModel)]="usuario.password" placeholder="Solo si deseas cambiarla">
+                        <small class="text-muted">Déjalo en blanco para mantener la contraseña actual.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm" [disabled]="cargando">
+                        @if (cargando) {
+                            <span class="spinner-border spinner-border-sm"></span> Guardando...
+                        } @else {
+                            Guardar Cambios
+                        }
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>

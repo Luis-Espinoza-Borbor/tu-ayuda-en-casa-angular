@@ -1,3 +1,40 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './auth/login/login';
+import { InicioComponent } from './features/inicio/inicio';
+import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard';
+import { ServiciosComponent } from './features/servicios/servicios';
+import { RegistroComponent } from './auth/registro/registro';
+import { RegistroTrabajadorComponent } from './auth/registro-trabajador/registro-trabajador';
+import { ContactoComponent } from './features/contacto/contacto';
+import { PanelTrabajadorComponent } from './features/panel-trabajador/panel-trabajador';
+import { PerfilComponent } from './features/perfil/perfil';
+import { AgendamientoComponent } from './features/agendamiento/agendamiento';
+import { CheckoutComponent } from './features/checkout/checkout';
+import { ConfirmacionComponent } from './features/confirmacion/confirmacion';
+import { HistorialServiciosComponent } from './features/historial-servicios/historial-servicios';
+import { CalificarComponent } from './features/calificar/calificar';
+import { NosotrosComponent } from './features/nosotros/nosotros';
+import { SoporteComponent } from './features/soporte/soporte';
+import { TerminosComponent } from './features/terminos/terminos';
+import { PrivacidadComponent } from './features/privacidad/privacidad';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+    { path: '', component: InicioComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'admin-dashboard', component: AdminDashboardComponent },
+    { path: 'servicios', component: ServiciosComponent },
+    { path: 'registro', component: RegistroComponent },
+    { path: 'registro-trabajador', component: RegistroTrabajadorComponent },
+    { path: 'contacto', component: ContactoComponent },
+    { path: 'panel-trabajador', component: PanelTrabajadorComponent },
+    { path: 'perfil', component: PerfilComponent },
+    { path: 'agendamiento', component: AgendamientoComponent },
+    { path: 'checkout', component: CheckoutComponent },
+    { path: 'confirmacion', component: ConfirmacionComponent },
+    { path: 'historial-servicios', component: HistorialServiciosComponent },
+    { path: 'calificar', component: CalificarComponent },
+    { path: 'nosotros', component: NosotrosComponent },
+    { path: 'soporte', component: SoporteComponent },
+    { path: 'terminos', component: TerminosComponent },
+    { path: 'privacidad', component: PrivacidadComponent },
+];

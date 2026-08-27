@@ -1,0 +1,118 @@
+<header class="position-relative mt-5 pt-3">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner" style="height: 65vh; min-height: 450px;">
+            <div class="carousel-item active h-100">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop"
+                    class="d-block w-100 h-100 object-fit-cover img-filtro-oscuro" alt="Servicio de Limpieza">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1920&auto=format&fit=crop"
+                    class="d-block w-100 h-100 object-fit-cover img-filtro-oscuro" alt="Servicio de Electricidad">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1920&auto=format&fit=crop"
+                    class="d-block w-100 h-100 object-fit-cover img-filtro-oscuro" alt="Cuidado del Hogar">
+            </div>
+        </div>
+    </div>
+
+    <div class="position-absolute top-50 start-50 translate-middle w-100 z-3 px-3" style="max-width: 900px;">
+        <div class="text-center text-white mb-4">
+            <h1 class="display-3 fw-bold mb-3 sombra-texto">¿En qué podemos ayudarte hoy?</h1>
+            <p class="lead fs-4 sombra-texto">Encuentra expertos de confianza en todo Guayaquil, directo a tu puerta.</p>
+        </div>
+
+        <div class="bg-white p-2 rounded-pill shadow-lg d-flex flex-column flex-md-row align-items-center mx-auto mt-4" style="max-width: 800px;">
+            
+            <div class="d-flex align-items-center flex-grow-1 w-100 px-3 py-2 py-md-0">
+                <i class="bi bi-search text-muted me-2"></i>
+                <input type="text" class="form-control border-0 shadow-none px-0" 
+                       placeholder="Ej. Reparar tubería, limpieza, electricista..."
+                       [(ngModel)]="textoBusqueda" (keyup.enter)="buscarProfesional()">
+            </div>
+            
+            <div class="d-none d-md-block vr mx-2"></div>
+            <hr class="d-md-none w-100 my-1 text-muted opacity-25">
+            
+            <div class="w-100 px-2 py-2 py-md-0" style="max-width: 250px;">
+                <select class="form-select border-0 shadow-none text-muted" [(ngModel)]="categoriaSeleccionada">
+                    <option value="">Elige una categoría</option>
+                    <!-- Iteramos las categorías dinámicamente -->
+                    @for (cat of categorias; track cat) {
+                        <option [value]="cat">{{ cat }}</option>
+                    }
+                </select>
+            </div>
+            
+            <button class="btn btn-warning rounded-pill px-4 py-2 fw-bold w-100 w-md-auto mt-2 mt-md-0" 
+                    style="background-color: var(--bs-warning);" (click)="buscarProfesional()">
+                Buscar Profesional
+            </button>
+        </div>
+    </div>
+</header>
+
+<main class="container my-5 py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Servicios más solicitados</h2>
+        <p class="text-muted">Soluciones rápidas y garantizadas para cada rincón de tu hogar.</p>
+    </div>
+
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 tarjeta-hover">
+                <div class="display-4 text-primary mb-3"><i class="bi bi-house-check"></i></div>
+                <h4 class="fw-bold text-dark">Limpieza Doméstica</h4>
+                <p class="text-muted small mb-4">Profesionales de confianza para dejar tu casa impecable.</p>
+                <a routerLink="/servicios" class="btn btn-outline-primary mt-auto rounded-pill fw-bold">Ver profesionales</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 tarjeta-hover">
+                <div class="display-4 text-primary mb-3"><i class="bi bi-tools"></i></div>
+                <h4 class="fw-bold text-dark">Gasfitería</h4>
+                <p class="text-muted small mb-4">Solución rápida a fugas, tuberías e instalaciones.</p>
+                <a routerLink="/servicios" class="btn btn-outline-primary mt-auto rounded-pill fw-bold">Ver profesionales</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 tarjeta-hover">
+                <div class="display-4 text-primary mb-3"><i class="bi bi-person-hearts"></i></div>
+                <h4 class="fw-bold text-dark">Niñeras</h4>
+                <p class="text-muted small mb-4">Cuidado responsable y seguro para los más pequeños.</p>
+                <a routerLink="/servicios" class="btn btn-outline-primary mt-auto rounded-pill fw-bold">Ver profesionales</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<section class="py-5 bg-light border-top">
+    <div class="container text-center py-4">
+        <h3 class="fw-bold text-primary mb-5">Lo que dicen nuestros clientes</h3>
+
+        <div id="carouselTestimonios" class="carousel carousel-dark slide" data-bs-ride="carousel">
+            <div class="carousel-indicators" style="bottom: -50px;">
+                <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner pb-4">
+                <div class="carousel-item active">
+                    <i class="bi bi-quote d-block mb-3"></i>
+                    <p class="fs-4 fst-italic px-md-5">"Se me rompió una tubería a medianoche. Encontré un gasfitero en 10 minutos en la plataforma y llegó rapidísimo. ¡Excelente servicio en Guayaquil!"</p>
+                    <h6 class="fw-bold text-primary mt-4">— María Fernanda R.</h6>
+                </div>
+                <div class="carousel-item">
+                    <i class="bi bi-quote d-block mb-3"></i>
+                    <p class="fs-4 fst-italic px-md-5">"El servicio de limpieza es excepcional. La profesional que vino fue muy puntual y detallista. Súper recomendada la aplicación."</p>
+                    <h6 class="fw-bold text-primary mt-4">— Carlos Martínez</h6>
+                </div>
+                <div class="carousel-item">
+                    <i class="bi bi-quote d-block mb-3"></i>
+                    <p class="fs-4 fst-italic px-md-5">"Como trabajador independiente, esta app me ha permitido conseguir clientes de manera constante y segura. Una gran herramienta para emprender."</p>
+                    <h6 class="fw-bold text-primary mt-4">— José Luis (Electricista)</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
