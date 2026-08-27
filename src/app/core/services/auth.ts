@@ -12,7 +12,7 @@ export class AuthService {
   // Buscamos al usuario en la base de datos
   async iniciarSesion(correo: string, pass: string): Promise<string> {
     
-    // 1. Verificamos Administrador (Estático)
+    // 1. Verificamos Administrador
     if (correo === 'admin@admin.com' && pass === '123456') {
       localStorage.setItem('usuarioActual', JSON.stringify({ nombre: 'Administrador', rol: 'Admin' }));
       return '/admin-dashboard';
@@ -93,7 +93,6 @@ export class AuthService {
   // --- Funciones para el Administrador ---
 
 async obtenerTrabajadores() {
-     // Le devolvemos el .db a la colección
      const querySnapshot = await getDocs(collection(this.firestore.db, "trabajadores"));
      const trabajadores: any[] = [];
      querySnapshot.forEach((documento) => {
