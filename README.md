@@ -101,54 +101,98 @@ Notificaciones y Modal UI: SweetAlert2
 📂 Estructura Real del Proyecto
 
 tu-ayuda-en-casa-angular/
-├── public/                         # Archivos estáticos públicos y favicon
-├── src/
-│   ├── app/
-│   │   ├── auth/                  # Módulo de Autenticación
-│   │   │   ├── login/             # Inicio de sesión de usuarios
-│   │   │   ├── registro/          # Registro de clientes
-│   │   │   └── registro-trabajador/ # Registro de profesionales
-│   │   ├── core/
-│   │   │   └── services/          # Servicios globales de comunicación con Firebase
-│   │   │       ├── auth.ts        # Gestión de sesiones y autenticación
-│   │   │       └── firestore.ts   # Operaciones CRUD con Firestore Cloud DB
-│   │   ├── features/              # Vistas y funcionalidades principales
-│   │   │   ├── admin-dashboard/   # Panel de Administración (Control RBAC)
-│   │   │   ├── agendamiento/      # Reserva y selección de fecha/hora
-│   │   │   ├── calificar/         # Sistema de valoraciones e historias
-│   │   │   ├── checkout/          # Pasarela de pago y desglose IVA 15%
-│   │   │   ├── confirmacion/      # Comprobante de orden procesada
-│   │   │   ├── contacto/          # Formulario de contacto y soporte
-│   │   │   ├── historial-servicios/# Historial de compras del cliente
-│   │   │   ├── inicio/            # Página principal / Landing page
-│   │   │   ├── nosotros/          # Información institucional y misión
-│   │   │   ├── panel-trabajador/  # Panel de gestión para proveedores
-│   │   │   ├── perfil/            # Perfil de usuario y datos personales
-│   │   │   ├── privacidad/        # Políticas de privacidad
-│   │   │   ├── servicios/         # Catálogo dinámico de servicios
-│   │   │   ├── soporte/           # Centro de ayuda e inquietudes
-│   │   │   └── terminos/          # Términos y condiciones del servicio
-│   │   ├── shared/                # Componentes compartidos
-│   │   │   ├── footer/            # Pie de página global
-│   │   │   └── navbar/            # Barra de navegación principal
-│   │   ├── app.config.ts          # Configuración global de la app Angular
-│   │   ├── app.routes.ts          # Definición de rutas SPA y guards
-│   │   ├── app.ts                 # Lógica del componente raíz
-│   │   ├── app.html               # Plantilla principal contenedora
-│   │   └── app.css                # Estilos del componente raíz
-│   ├── environments/              # Variables de entorno y llaves de Firebase
-│   │   ├── environment.development.ts
-│   │   └── environment.ts
-│   ├── index.html                 # Punto de entrada HTML5
-│   ├── main.ts                    # Bootstrap de inicio de la app
-│   └── styles.css                 # Estilos globales (Tailwind CSS)
-├── angular.json                   # Configuración del CLI de Angular
-├── firebase.json                  # Configuración de despliegue en Firebase Hosting
-├── package.json                   # Lista de dependencias del proyecto
-└── tsconfig.json                  # Configuración del compilador TypeScript
 
+public/ — Archivos estáticos públicos y favicon
 
-⚙️ Instalación y Configuración Local
+src/
+
+app/
+
+auth/ — Módulo de Autenticación
+
+login/ — Inicio de sesión de usuarios
+
+registro/ — Registro de clientes
+
+registro-trabajador/ — Registro de profesionales
+
+core/
+
+services/ — Servicios globales de comunicación con Firebase
+
+auth.ts — Gestión de sesiones y autenticación
+
+firestore.ts — Operaciones CRUD con Firestore Cloud DB
+
+features/ — Vistas y funcionalidades principales
+
+admin-dashboard/ — Panel de Administración (Control RBAC)
+
+agendamiento/ — Reserva y selección de fecha/hora
+
+calificar/ — Sistema de valoraciones e historias
+
+checkout/ — Pasarela de pago y desglose IVA 15%
+
+confirmacion/ — Comprobante de orden procesada
+
+contacto/ — Formulario de contacto y soporte
+
+historial-servicios/ — Historial de compras del cliente
+
+inicio/ — Página principal / Landing page
+
+nosotros/ — Información institucional y misión
+
+panel-trabajador/ — Panel de gestión para proveedores
+
+perfil/ — Perfil de usuario y datos personales
+
+privacidad/ — Políticas de privacidad
+
+servicios/ — Catálogo dinámico de servicios
+
+soporte/ — Centro de ayuda e inquietudes
+
+terminos/ — Términos y condiciones del servicio
+
+shared/ — Componentes compartidos
+
+footer/ — Pie de página global
+
+navbar/ — Barra de navegación principal
+
+app.config.ts — Configuración global de la app Angular
+
+app.routes.ts — Definición de rutas SPA y guards
+
+app.ts — Lógica del componente raíz
+
+app.html — Plantilla principal contenedora
+
+app.css — Estilos del componente raíz
+
+environments/ — Variables de entorno y llaves de Firebase
+
+environment.development.ts
+
+environment.ts
+
+index.html — Punto de entrada HTML5
+
+main.ts — Bootstrap de inicio de la app
+
+styles.css — Estilos globales (Tailwind CSS)
+
+angular.json — Configuración del CLI de Angular
+
+firebase.json — Configuración de despliegue en Firebase Hosting
+
+package.json — Lista de dependencias del proyecto
+
+tsconfig.json — Configuración del compilador TypeScript
+
+⚙️ Instrucciones de Instalación y Ejecución Local
 
 Requisitos Previos
 
@@ -161,36 +205,14 @@ Angular CLI instalado globalmente: npm install -g @angular/cli
 Pasos de Instalación
 
 Clonar el Repositorio:
-
-git clone https://github.com/usuario/tu-ayuda-en-casa-angular.git
+git clone https://github.com/Luis-Espinoza-Borbor/tu-ayuda-en-casa-angular.git
 cd tu-ayuda-en-casa-angular/tu-ayuda-en-casa-angular
 
-
 Instalar Dependencias:
-
 npm install
 
-
-Configurar Credenciales de Firebase:
-Verificar las credenciales en src/environments/environment.ts:
-
-export const environment = {
-  production: false,
-  firebaseConfig: {
-    apiKey: "TU_API_KEY",
-    authDomain: "tu-ayuda-en-casa.firebaseapp.com",
-    projectId: "tu-ayuda-en-casa",
-    storageBucket: "tu-ayuda-en-casa.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcdef123456"
-  }
-};
-
-
 Ejecutar el Servidor de Desarrollo:
-
 ng serve
-
 
 Abrir la aplicación en el navegador: http://localhost:4200
 
@@ -213,20 +235,16 @@ Se pueden registrar nuevos perfiles desde los formularios en la interfaz (/auth/
 📦 Compilación y Despliegue en Firebase Hosting
 
 Compilar el Paquete de Producción:
-
 ng build
 
-
 Iniciar Sesión e Iniciar Despliegue:
-
 firebase login
 firebase deploy
-
 
 URL de Producción: https://tu-ayuda-en-casa.web.app
 
 📜 Licencia y Reconocimientos
 
-Proyecto desarrollado con fines strictly académicos para el Instituto Superior Tecnológico Liceo Cristiano (ISTLC).
+Proyecto desarrollado con fines estrictamente académicos para el Instituto Superior Tecnológico Liceo Cristiano (ISTLC).
 
 Quedan reservados todos los derechos de autoría a favor de los estudiantes Luis Alberto Espinoza Borbor y Danny Javier Oleas Potes.
